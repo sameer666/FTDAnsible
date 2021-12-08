@@ -234,7 +234,7 @@ def main():
         console_username=dict(type='str', required=True),
         console_password=dict(type='str', required=True, no_log=True),
 
-        rommon_file_location=dict(type='str', required=True),
+        #rommon_file_location=dict(type='str', required=True),
         image_file_location=dict(type='str', required=True),
         image_version=dict(type='str', required=True),
         force_reinstall=dict(type='bool', required=False, default=False)
