@@ -49,12 +49,12 @@ class AbstractFtdPlatform(object):
     def supports_ftd_model(cls, model):
         return any(model == item.value for item in cls.PLATFORM_MODELS)
 
-    @staticmethod
-    def parse_rommon_file_location(rommon_file_location):
-        rommon_url = urlparse(rommon_file_location)
-        if rommon_url.scheme != 'tftp':
-            raise ValueError('The ROMMON image must be downloaded from TFTP server, other protocols are not supported.')
-        return rommon_url.netloc, rommon_url.path
+#     @staticmethod
+#     def parse_rommon_file_location(rommon_file_location):
+#         rommon_url = urlparse(rommon_file_location)
+#         if rommon_url.scheme != 'tftp':
+#             raise ValueError('The ROMMON image must be downloaded from TFTP server, other protocols are not supported.')
+#         return rommon_url.netloc, rommon_url.path
 
 
 class Ftd2100Platform(AbstractFtdPlatform):
@@ -67,16 +67,14 @@ class Ftd2100Platform(AbstractFtdPlatform):
                        sudo_password=params.get("device_sudo_password") or params["device_password"])
 
     def install_ftd_image(self, params):
-        line = self._ftd.ssh_console(ip=params["console_ip"],
+        line = self._ftd.telnet_console_with_credential(ip=params["console_ip"],
                                      port=params["console_port"],
                                      username=params["console_username"],
                                      password=params["console_password"])
 
         try:
-            rommon_server, rommon_path = self.parse_rommon_file_location(params["rommon_file_location"])
-            line.baseline_fp2k_ftd(tftp_server=rommon_server,
-                                   rommon_file=rommon_path,
-                                   uut_hostname=params["device_hostname"],
+            #rommon_server, rommon_path = self.parse_rommon_file_location(params["rommon_file_location"])
+            line.baseline_fp2k_ftd(uut_hostname=params["device_hostname"],
                                    uut_username=params["device_username"],
                                    uut_password=params.get("device_new_password") or params["device_password"],
                                    uut_ip=params["device_ip"],
