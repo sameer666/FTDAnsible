@@ -1,0 +1,36 @@
+name: Publish
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build-and-publish:
+    name: Build collection and Publish on Ansible Galaxy
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ansible: [2.10.5]
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+
+      - name: Install ansible-base (v${{ matrix.ansible }})
+        run: pip install https://github.com/ansible/ansible/archive/v${{ matrix.ansible }}.tar.gz --disable-pip-version-check
+
+      - name: Build a collection tarball
+        run: pwd && ls -al && find . && ansible-galaxy collection build --output-path "${GITHUB_WORKSPACE}/.cache/collection-tarballs"
+
+      - name: Read galaxy.yml
+        uses: pietrobolcato/action-read-yaml@1.1.0
+        id: galaxy
+        with:
+          config: ${{github.workspace}}/galaxy.yml
+
+      - name: Publish to Ansible Galaxy
+        run: ansible-galaxy collection publish "${GITHUB_WORKSPACE}/.cache/collection-tarballs/${{steps.galaxy.outputs['namespace']}}-${{steps.galaxy.outputs['name']}}-${{steps.galaxy.outputs['version']}}.tar.gz" --token ${{secrets.API_TOKEN}}
