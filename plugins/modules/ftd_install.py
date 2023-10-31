@@ -18,12 +18,6 @@
 # along with Ansible.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-from __future__ import absolute_import, division, print_function
-from ansible.module_utils.six import iteritems
-from enum import Enum
-from ansible.module_utils.connection import Connection
-from ansible.module_utils.basic import AnsibleModule
-
 __metaclass__ = type
 
 ANSIBLE_METADATA = {'metadata_version': '1.1',
@@ -191,6 +185,12 @@ msg:
     type: str
 """
 
+from __future__ import absolute_import, division, print_function
+from ansible.module_utils.six import iteritems
+from enum import Enum
+from ansible.module_utils.connection import Connection
+from ansible.module_utils.basic import AnsibleModule
+
 try:
     from ansible.module_utils.configuration import BaseConfigurationResource, ParamName, PATH_PARAMS_FOR_DEFAULT_OBJ
     from ansible.module_utils.device import HAS_KICK, FtdPlatformFactory, FtdModel
@@ -200,7 +200,6 @@ except ImportError:
 
 REQUIRED_PARAMS_FOR_LOCAL_CONNECTION = [
     'device_ip', 'device_netmask', 'device_gateway', 'device_model', 'dns_server']
-
 
 class FtdOperations(Enum):
     GET_SYSTEM_INFO = 'getSystemInformation'
