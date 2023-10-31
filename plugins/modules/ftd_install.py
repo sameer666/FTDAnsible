@@ -18,6 +18,8 @@
 # along with Ansible.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+from __future__ import absolute_import, division, print_function
+
 __metaclass__ = type
 
 ANSIBLE_METADATA = {'metadata_version': '1.1',
@@ -185,7 +187,6 @@ msg:
     type: str
 """
 
-from __future__ import absolute_import, division, print_function
 from ansible.module_utils.six import iteritems
 from enum import Enum
 from ansible.module_utils.connection import Connection
@@ -200,6 +201,7 @@ except ImportError:
 
 REQUIRED_PARAMS_FOR_LOCAL_CONNECTION = [
     'device_ip', 'device_netmask', 'device_gateway', 'device_model', 'dns_server']
+
 
 class FtdOperations(Enum):
     GET_SYSTEM_INFO = 'getSystemInformation'
