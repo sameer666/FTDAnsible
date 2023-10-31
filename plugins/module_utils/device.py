@@ -36,14 +36,16 @@ class FtdPlatformFactory(object):
         for cls in AbstractFtdPlatform.__subclasses__():
             if cls.supports_ftd_model(model):
                 return cls(module_params)
-        raise ValueError("FTD model '%s' is not supported by this module." % (model))
+        raise ValueError(
+            "FTD model '%s' is not supported by this module." % (model))
 
 
 class AbstractFtdPlatform(object):
     PLATFORM_MODELS = []
 
     def install_ftd_image(self, params):
-        raise NotImplementedError('The method should be overridden in subclass')
+        raise NotImplementedError(
+            'The method should be overridden in subclass')
 
     @classmethod
     def supports_ftd_model(cls, model):
@@ -58,7 +60,8 @@ class AbstractFtdPlatform(object):
 
 
 class Ftd2100Platform(AbstractFtdPlatform):
-    PLATFORM_MODELS = [FtdModel.FTD_2110, FtdModel.FTD_2120, FtdModel.FTD_2130, FtdModel.FTD_2140]
+    PLATFORM_MODELS = [FtdModel.FTD_2110, FtdModel.FTD_2120,
+                       FtdModel.FTD_2130, FtdModel.FTD_2140]
 
     def __init__(self, params):
         self._ftd = Kp(hostname=params["device_hostname"],
@@ -68,15 +71,16 @@ class Ftd2100Platform(AbstractFtdPlatform):
 
     def install_ftd_image(self, params):
         line = self._ftd.telnet_console_with_credential(ip=params["console_ip"],
-                                     port=params["console_port"],
-                                     username=params["console_username"],
-                                     password=params["console_password"])
+                                                        port=params["console_port"],
+                                                        username=params["console_username"],
+                                                        password=params["console_password"])
 
         try:
-            #rommon_server, rommon_path = self.parse_rommon_file_location(params["rommon_file_location"])
+            # rommon_server, rommon_path = self.parse_rommon_file_location(params["rommon_file_location"])
             line.baseline_fp2k_ftd(uut_hostname=params["device_hostname"],
                                    uut_username=params["device_username"],
-                                   uut_password=params.get("device_new_password") or params["device_password"],
+                                   uut_password=params.get(
+                                       "device_new_password") or params["device_password"],
                                    uut_ip=params["device_ip"],
                                    uut_netmask=params["device_netmask"],
                                    uut_gateway=params["device_gateway"],
@@ -89,7 +93,8 @@ class Ftd2100Platform(AbstractFtdPlatform):
 
 
 class FtdAsa5500xPlatform(AbstractFtdPlatform):
-    PLATFORM_MODELS = [FtdModel.FTD_ASA5506_X, FtdModel.FTD_ASA5508_X, FtdModel.FTD_ASA5516_X]
+    PLATFORM_MODELS = [FtdModel.FTD_ASA5506_X,
+                       FtdModel.FTD_ASA5508_X, FtdModel.FTD_ASA5516_X]
 
     def __init__(self, params):
         self._ftd = Ftd5500x(hostname=params["device_hostname"],
@@ -102,7 +107,8 @@ class FtdAsa5500xPlatform(AbstractFtdPlatform):
                                      username=params["console_username"],
                                      password=params["console_password"])
         try:
-            rommon_server, rommon_path = self.parse_rommon_file_location(params["rommon_file_location"])
+            rommon_server, rommon_path = self.parse_rommon_file_location(
+                params["rommon_file_location"])
             line.rommon_to_new_image(rommon_tftp_server=rommon_server,
                                      rommon_image=rommon_path,
                                      pkg_image=params["image_file_location"],
