@@ -165,15 +165,6 @@ options:
     default: cisco.com
 """
 
-# Backup-
-#
-# rommon_file_location:
-#   description:
-#     - Path to the boot (ROMMON) image on TFTP server.
-#     - Only TFTP is supported.
-#   required: true
-#   type: str
-
 EXAMPLES = """
   - name: Install image v6.3.0 on FTD 5516
     ftd_install:
@@ -192,9 +183,6 @@ EXAMPLES = """
       image_file_location: 'https://10.89.0.11/installers/ftd-6.3.0-83.pkg'
       image_version: 6.3.0-83
 """
-
-# Backup
-# rommon_file_location: 'tftp://10.89.0.11/installers/ftd-boot-9.10.1.3.lfbff'
 
 RETURN = """
 msg:
